@@ -1,22 +1,30 @@
-namespace my.bookshop;
+namespace store.commerce;
 using { Country, managed } from '@sap/cds/common';
 
-entity Books {
-  key ID : Integer;
-  title  : localized String;
-  author : Association to Authors;
-  stock  : Integer;
-}
 
-entity Authors {
-  key ID : Integer;
-  name   : String;
-  books  : Association to many Books on books.author = $self;
-}
-
-entity Orders : managed {
+entity Products {
   key ID  : UUID;
-  book    : Association to Books;
-  country : Country;
-  amount  : Integer;
+  categoryid: UUID;
+  subcategoryid: UUID;
+  name  :  String;
+  category: Association to many Category on category.ID = $self.categoryid;
+  subcategory : Association to many SubCategory on subcategory.ID = $self.subcategoryid;
+  image : LargeBinary @Core.MediaType: imageType;
+  imageType : String  @Core.IsMediaType;
 }
+
+entity SubCategory {
+  key ID  : UUID;
+  categoryid : UUID;
+  name   : String;
+  image : LargeBinary @Core.MediaType: imageType;
+  imageType : String  @Core.IsMediaType;
+  category: Association to many Category on category.ID = $self.categoryid;
+}
+
+entity Category {
+ key ID  : UUID;
+ name   : String;
+}
+
+

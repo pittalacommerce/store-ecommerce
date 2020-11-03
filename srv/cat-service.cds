@@ -1,7 +1,7 @@
-using my.bookshop as my from '../db/data-model';
+using store.commerce as commerce from '../db/data-model';
 
 service CatalogService {
-  entity Books @readonly as projection on my.Books;
-  entity Authors @readonly as projection on my.Authors;
-  entity Orders  as projection on my.Orders;
+  entity  Products  as projection on commerce.Products;
+  entity  SubCategory as projection on commerce.SubCategory;
+  entity Category  as projection on commerce.Category;
 }

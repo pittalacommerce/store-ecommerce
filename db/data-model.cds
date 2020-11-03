@@ -17,7 +17,7 @@ entity SubCategory:cuid,managed {
   name   : String;
   category: Association to many Category on category.ID = $self.categoryid ; @assert.integrity:true
   product:Association to many Products on product.subcategoryid = $self.ID; @assert.integrity:true
-  image : LargeBinary @Core.MediaType: imageType;
+  image : LargeBinary @Core.MediaType: 'image/jpg';
   imageType : String  @Core.IsMediaType;
 }
 

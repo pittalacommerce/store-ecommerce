@@ -1,30 +1,27 @@
 namespace store.commerce;
-using { Country, managed } from '@sap/cds/common';
+using {cuid, Country, managed } from '@sap/cds/common';
 
 
-entity Products {
-  key ID  : UUID;
-  categoryid: UUID;
-  subcategoryid: UUID;
+entity Products:cuid,managed {
+  categoryid: UUID;     @FieldControl.Mandatory 
+  subcategoryid: UUID;   @FieldControl.Mandatory
   name  :  String;
-  category: Association to many Category on category.ID = $self.categoryid;
-  subcategory : Association to many SubCategory on subcategory.ID = $self.subcategoryid;
-  image : LargeBinary @Core.MediaType: imageType;
+  category: Association to many Category on category.ID = $self.categoryid;  @assert.integrity:true
+  subcategory : Association to many SubCategory on subcategory.ID = $self.subcategoryid;  @assert.integrity:true
+  image : LargeBinary @Core.MediaType: 'image/jpg';
   imageType : String  @Core.IsMediaType;
 }
 
-entity SubCategory {
-  key ID  : UUID;
-  categoryid : UUID;
+entity SubCategory:cuid,managed {
+  categoryid : UUID;   @FieldControl.Mandatory 
   name   : String;
-  image : LargeBinary @Core.MediaType: imageType;
+  category: Association to many Category on category.ID = $self.categoryid ; @assert.integrity:true
+  product:Association to many Products on product.subcategoryid = $self.ID; @assert.integrity:true
+  image : LargeBinary @Core.MediaType: 'image/jpg';
   imageType : String  @Core.IsMediaType;
-  category: Association to many Category on category.ID = $self.categoryid;
 }
 
-entity Category {
- key ID  : UUID;
+entity Category:cuid,managed {
  name   : String;
+ subcategory : Association to many SubCategory on subcategory.categoryid = $self.ID;
 }
-
-
